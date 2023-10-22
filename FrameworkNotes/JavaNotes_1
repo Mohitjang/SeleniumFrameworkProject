@@ -1,0 +1,193 @@
+====================================================================================================================================================================================
+
+Sections 34 :- Java OOPS basic for Selenium Part-1
+
+====================================================================================================================================================================================
+video 278:- 
+video 279:- 
+
+Topic 1. Interfaces:- 
+						Example Interfaces codes:- centralTraffic, ContinentalTraffic, AustralianTraffic.
+
+	1. Interfaces are just like the classses but the only diff is that interfaces doesn't hold any body.
+	2. In interfaces we can only define empty methods.
+	3. Classes should define and implement method present in interface.
+	4. only classes can implement methods which are present in interfaces.
+	5. Which class is implementing an interface that class must have to implement the methods also from interface.
+	
+
+	
+	1. If we don't define specifiers that it will take public automatically.
+	2. One class can implement more than one interface.
+	3. to access every interface's methods we have to create object from every interface.
+	4. if we want to access methods which are present in same class than also we have to create object of that class as well.
+
+====================================================================================================================================================================================
+video 281:-
+
+Topic 2. Abstract Classes & Methods:-
+						Example classes codes:- ParentAirCraft, ChildEmirates.
+
+	1. A class which is declared with the Anstract keyword is called as Abstract class in java.
+	2. It can have Abstract (methods without the body) and non-abstract (methods with the body) methods.
+	3. Abstraction classes acheives partial Abstraction.
+	4. Interfaces - on the other hand used for 100% abstraction.
+	5. in Interfaces all the methods are umimplemented while in Abstract class there is both types of methods ( Unimplemented and implemented ).
+	6. if a class has one or more unimplemented methood than that class is known as Abstract class.
+	7. we can not create object of abstract class.
+	8. But private modifier is not allowed as access modifier for the methods defined in abstract class. 
+		=> WHY? 
+			- the goal of abstract class is that some one has to use this method but private modifier is allowing us.
+			- cause abstract class is parent class and child class must be able to use all the parent class methods.
+	
+
+### Quick difference between Abstract classes and Interfaces:-
+	
+# Interfaces:-
+	1. Interfaces only contains Abstract methods.
+	2. Access specifiers must be public in interfaces methods. i.e. Public,private,protected.
+	3. variables defined must be public, static, final.
+	4. To implement an interface we use implements keyword.
+
+
+# Abstract classes:- 
+	1. Abstract class can contain abstract methods, concrete methods or both.
+	2. Except private we can use anny access specifiers for methods in Abstract class.
+	3. Except private variables we can use anny access specifiers
+	4. To implement an Abstract class we use extends keyword.
+
+====================================================================================================================================================================================
+video 282.
+video 283.
+						Example classes code:- ChildClassDemo, ParentClassDemo.
+
+Topic 3. Inheritance:-
+
+	1. when we want to inherit the methods of a class to the other class.
+	2. then we can use inheritance concept of oops.
+	3. we inherit parent class using extends keyword.
+	4. now we can use parent class methods using child class object including global public variables present in parent class.
+	
+Topic 4. Types of Inheritance:-
+
+	1. Multiple Inheritance :- In java we cannot extend multiple parents.
+	2. If we want to access properties of child class or parent class. than we have to initialize object according to that.
+		Example:- 
+			ChildClassDemo cd = new ChildClassDemo(); 		// the cd obj will refer to the child class properties and methods of both classes.
+			ParentClassDemo pd  = new ChildClassDemo(); 	// the pd obj will refer to the parent class properties and methods only..
+			System.out.println(cd.c);
+			System.out.println(cd.x);
+			System.out.println(pd.p);
+			System.out.println(pd.x);
+
+====================================================================================================================================================================================
+video 285.
+						Example classes code:- ChildClassDemo, ParentClassDemo.
+						
+Topic 5. Function/Method OverLoading:-
+
+	1. If in the same class we have multiple methods with the same name and have different argument list, then we call it Method/Function Overloading.
+	2. either argument count should be different.
+	3. either argument data type should be different.
+
+
+Topic 6. Function/Method Overriding:-
+
+	1. in this both funtion name and argument list same but now it's present in both child and parent class.
+	2. in this we give preference to the child method over parent method.
+	3. it means if we have same method in child and parent class then child method will override the parent class method.
+	4. hence it's called method overridden.
+
+====================================================================================================================================================================================
+video 288.
+
+Topic 7. Arrays and their usage:-
+
+#one way of initializing array:-
+
+	1. this is initialization of an array with different value capacity of particular data type:-
+	2. at the same it allocates memory for array as well. 
+		example:-
+			int[] a = new int[5]; //lenght 5
+			int[] b = new int[10]; //lenght 10
+	3. adding values to the arrays:-
+		example:- 
+			a[0]= 432;
+			a[1]= 121;
+			a[2]= 134;
+	4. retrieving values from an array:-
+		example:-
+			for(int i = 0; i<a.length;i++) {
+				System.out.println(a[i]);
+			}
+
+#other way of initializing array:-
+
+	1. The other way of declare an arrays is in the form of literal.
+	2. In this form we can directly pass the values in array and this is called array literal.
+	 	example:-
+	 		int b[] = {2,3,34,53,21};
+	3. retrieving values from an array:-
+		example:-
+			for(int i = 0; i<b.length;i++) {
+							System.out.println(a[i]);
+						}
+
+====================================================================================================================================================================================
+video 289.
+video 291.
+video 292.
+video 293.
+
+Topic 8. Multi-Dimentional Arrays:-
+
+	1. to declare a Multi-Dimentional Arrays we need to provide one more bracket than simple array.
+		example:-
+			int[][] a = new int[3][4];
+	2. How to pass the values into it.
+		example:-
+			a[0][0] = 12;
+			a[0][1] = 223;
+			a[0][2] = 212;
+			a[0][3] = 452;
+			a[1][0] = 21;
+			a[1][1] = 221;
+			a[1][2] = 62;
+			a[1][3] = 25;
+	3. How to declare Multi-Dimentional Arrays as a literal.
+		example:-
+			int[][] b = {{2,4,5},{5,3,2},{223,543,643}};
+	4. retrieving values from a Multi-Dimentional Arrays.
+		example:- 
+			System.out.println(a[2][3]);
+	5. retrieving all the values from Multi-Dimentional Arrays:-
+		example:-
+			for (int i = 0; i < 3; i++) { // row
+				for (int j = 0; j < 4; j++) { // coloumn
+					System.out.println(a[i][j]);
+				}
+			}
+			
+
+## interview practice quetions:-
+
+1. Print the samllest number in the about matrix or multidimentional array.
+2. Print the max number in the about matrix or multidimentional array.
+3. Print the minimum number and the maximum number lies in that coloumn.
+
+====================================================================================================================================================================================
+The END:)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,358 @@
+=============================================================================================================================================================================
+
+		Framework Part 6:- Test Execution form Maven & Integration with Jenkins CI/CD pipeline.
+
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video1.:- How to run tests in framework from terminal using Maven commands:-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Q1. How to run files using Maven commands in jenkins.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+A. Now we used to run using UI our tests in ecllipse but when we integrate our tests in jenkin then we have to run our tests using maven commands.
+	In this lecture we will learn that :-
+	
+*****Source: How to Install Maven and Configure Environment Variables - QA Madness Software testing company
+
+	1. Maven will help us to run tests using maven commands and it's a great advantage of Maven projects.
+
+Step1. Download Maven from "maven.apache.org" for mac or windows.
+Step2. After that, go to the folder with the downloaded archive and unzip it. Move the unpacked folder to the C:\Program Files\Maven folder. 
+		You can move the folder to any location of your choice, but it would be more convenient to keep it in the mentioned folder.
+Step3. Open the Maven folder. Copy the path to the clipboard. 
+		You can do it easily with the right-click on the field with the folder path and selecting the Copy address path as text in the menu.
+Step4. Then, go to the environment variable settings. For this, right-click on the Windows Start button and select System in the menu. 
+		In the new window, click on the Advanced System Settings. You’ll see a pop-up window. Click on the Environment Variables there. 
+		Click on New in the new pop-up window in the System variables. Enter MAVEN_HOME (all characters in capital case) in the Variable name field. 
+		Paste the copied earlier path to the Maven folder in the Variable value. Click on the OK button.
+Step5. Select the Path variable and click on Edit. In the new window, click on New. In the new field, enter %MAVEN_HOME%\bin. 
+		After that, click OK in all of the previously opened windows
+Step6. To verify that the installation was successful, we need to open a command prompt. 
+		For this, open the Windows Start menu, type cmd, and press Enter. Type maven -version in the command prompt and press Enter. 
+		If you see the information about the version in the following lines, the installation was successful.
+
+
+EXAMPLE:-
+
+		mjangid@MJANGID-M-KH52 ~ % cd $HOME
+		mjangid@MJANGID-M-KH52 ~ % CAT > .zshrc
+		export MAVEN_HOME=$HOME/apache-maven-3.9.4
+		export PATH=$MAVEN_HOME/bin:$PATH
+		exit
+
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Q2. How to integrate TestNG with maven and run using terminal.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+B. to integrate testng with maven we have to go to the site "https://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html"
+
+Step1. Using Suite XML Files : copy this code below:- 
+
+
+paste it inside the pom.xml file between Plugins tag.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+						<plugins>
+						    [...]
+						      <plugin>
+						        <groupId>org.apache.maven.plugins</groupId>
+						        <artifactId>maven-surefire-plugin</artifactId>
+						        <version>3.1.2</version>
+						        <configuration>
+						          <suiteXmlFiles>
+// <suiteXmlFile>HERE WE HAVE TO GIVE OUR XML FILE</suiteXmlFile>
+									<suiteXmlFile>testsuites.testng.xml</suiteXmlFile>
+						          </suiteXmlFiles>
+						        </configuration>
+						      </plugin>
+						    [...]
+						</plugins>
+						
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Step2.  But one problem is there in this type:-
+		we are specificaly hardcoding the xml files.
+		But in our case there are three testng suites files.
+		with this kind of code everytime we have to update the xml file name here in pom.xml file.
+		
+		to solve this issue we will use Profiles:- 
+		
+Step3.  In Maven terminologies there is something called Profiles:- 
+		In this code we just set id's for the xml files. now from terminal it becomes easy to run the xml suited files
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+EXAMPLE:- 
+
+<profiles>
+		
+		
+		<profile>
+			<id>Regression</id>
+			<build>
+				<pluginManagement>
+					<!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<version>3.1.2</version>
+							<configuration>
+								<suiteXmlFiles>
+									<suiteXmlFile>testsuites/testng.xml</suiteXmlFile>
+								</suiteXmlFiles>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+		
+		
+		
+		<profile>
+			<id>Purchase</id>
+			<build>
+				<pluginManagement>
+					<!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<version>3.1.2</version>
+							<configuration>
+								<suiteXmlFiles>
+									<suiteXmlFile>testsuites/Purchase.xml</suiteXmlFile>
+								</suiteXmlFiles>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+		<profile>
+			<id>ErrorValidation</id>
+			<build>
+				<pluginManagement>
+					<!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<version>3.1.2</version>
+							<configuration>
+								<suiteXmlFiles>
+									<suiteXmlFile>testsuites/ErrorValidationTest.xml</suiteXmlFile>
+								</suiteXmlFiles>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+	
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Q3. How to run suites file using terminal.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+In TERMINAL:- 
+ 1. first we have to go to the project path.
+ 2. write "mvn test -PRegression"   press enter (it will run testng.xml whose id is Regression)
+ 3. write "mvn test -PErrorValidtion"   press enter (it will run testng.xml whose id is ErrorValidtion)
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video2.:- Set Global parameters using maven commands and update test at run time:-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q1. How to set global values from our maven commands.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+A. like we had set broser name in global.propertoes file. 
+		if we want to change the browser name normally we have to go to global.propertoes file rewrite the browser name.
+	But in terminal also we can do this maven commands:-
+	
+		Example:- 
+
+
+	COMMANDS:- mvn test -PRegression -Dbrowser=Firefox
+	COMMANDS:- mvn test- Dbrowser=Firefox
+	
+			// D stands for maven parameters. like we want to decide which browser we want to run.
+
+THIS CODE :- at the same time we have to add this line in our browser initialize method:-
+
+String browserName = System.getProperty("browser") != null ? System.getProperty("browser") : prop.getProperty("browser");
+
+
+
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video3.:- Install jenkins in the local system for CI/CD:-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q1. how to download jenkin.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+A. download jenkins war file from "https://www.jenkins.io/download/":-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q2.  How to start jenkin war file on our local server.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+=>>  Give the file name to java using cmd:- java -jar jenkins.war
+A. terminal>> go to directory where jenkins war file is located 
+
+Step1. In this line we are asking to java to open the jar file.
+	>> java -jar jenkins.war
+
+Step2. In this line we added the port where we want to open jenkins.
+	>> java -jar jenkins.war -httpPort=9090
+
+Step3. press enter
+
+Step4. open browser and type Localhost:9090
+
+Step5. Set up USername and password and login to jenkins.
+		we landed on homepage of jenkins.
+
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video4.:- Integrate the Selenium framework with jenkins and parameterize jenkin job:-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+A. Create new fresh job in jenkins to run our selenium framework tests.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Step1. click on new item.
+		EnterItemName - Selenium Framework
+Step2. Select FreeStyle project and click on OK.
+		we land on configuration page of that job now :-
+Step3. if we have our project on GITHUB than paste URL if project ,
+		But we have project on our local machine :-
+		Select advanced >> use custom workspace and 
+		paste the path of project.
+Step4. Build >> invoke top level Maven targets >>
+Step5. In Goal section we have to provide our maven commands which we used in terminal to run tests.
+		ex. mvn -test -PRegression -Dbrowser=chrome
+NOTE- in the project there must be pom.xml file because this command will run against pom.xml file only.
+Step6. save it.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+B. Let's try to run the project.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Step1. Click on BuildNow .
+		now the given command will be triggered on that project level path.
+Step2. To see the logs of the job goto condoleOutput of job where we can see the logs of test execution.
+Step3. But one thing we are hardcoding Browser = chrome.
+		We can do this easily by Parameterizing this jenkins job.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+C. Parameterizing the jenkins job.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ But one thing we are hardcoding Browser = chrome.
+	We can do this easily by Parameterizing this jenkins job.
+
+Step1. GoTo Configire
+		Scroll down :-
+Step2. We will see the checBox that "This project is parameterised" 
+		click on checkbox.
+Step3. AddParameter >> select choice parameter.
+		name = 
+				browserName
+		choices = 
+				chrome
+				firefox
+				edge
+				safari
+Step4. click on save.
+Step5. click on build with parameters:-
+		here we will get dropdown of parameters.
+Step6. But still it will not work because we didnot set this into our maven command:-
+		let's do this:_
+		
+Step7. mvn -test -PRegression -Dbroser="$browserName"
+Step8. now we will choose Firefox as browserName 
+Step9. Click on Build.
+
+NOTE:- same we will do for Profile names.
+
+=============================================================================================================================================================================
+		
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video5.:- How to run tests in HeadLess mode and Integrate the parameter in jenkins:-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+A. How to run tests in headless mode.
+		1. It means we can not see the test execution but the test will executed in the backend
+		2. headless mode is faster that's why it's important.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Step1.  First we have to update the driver initializer method:-
+
+//		for headless chrome mode:-
+		if (browserName.contains("chrome")) {
+			ChromeOptions options = new ChromeOptions();
+//			WebDriverManager.chromedriver.setup();
+			if (browserName.contains("headless")) {
+
+				options.addArguments("headless");
+				driver = new ChromeDriver();
+			}
+			driver = new ChromeDriver(options);
+			driver.manage().window().setSize(new Dimension(1440, 900)); //setting size
+		}
+
+Step2. now we have to add parameter in jenkins also as "chromeheadless"
+done!!!
+
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video6.:- Schedule jenkins jobs with regex and trigger nighty automation jobs:-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+A. In this section we will learn that how to Schedule time to run the jenkins jobs.
+	When time will trigger , selected job automatically starts executing.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Step1. GoTo configure:-
+Step2. Build triggers:-
+Step3. Build Periodically:-
+		Give the schedule:- in the sepcific format :-
+		
+		example :-( _ _ _ _ _ ) we have to fill five values:-
+		
+				1. MINUTES - Minutes of the hour (0-59).
+				2. HOURS - Hours of the day (0-23).
+				3. DAY - Day of the Month (1-31).
+				4. MONTH - Month in a year (1-12).
+				5. DAYWEEK - Day of the week (0-7) ,where 0 and 7 are sunday.
+					
+		Example :- we want to run at 5:35 AM , of 12th of March.
+		
+		pattern:- 35-5-12-3-*
+
+Note:- at the minutes section we can't let empty cause if we don't fill that means for the whole 60 minute job will be triggered.
+		to avoid that we can use "H" at the place of "*", Than it will run only once in that Hour.
+
+=============================================================================================================================================================================

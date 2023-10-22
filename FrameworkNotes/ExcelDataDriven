@@ -1,0 +1,169 @@
+==============================================================================================================================================================================
+
+Section 26 :- Understand excel data driven testing fuctions with examples.
+
+==============================================================================================================================================================================
+
+video 1. what is apache POI API & Download instructions.
+
+1. To connect our java test cases to excel data we need apache POI API.
+2. Connect dependency to pom.xml file.
+	poi & poi-ooxml
+		
+==============================================================================================================================================================================
+
+video 2. Strategy to access excel data.
+
+Strategy to access Excel data:-
+		
+		Step1. Create object for XSSFWorkbook class
+				-> get hold of Excel first.
+				
+		Step2. Get access to sheet
+				-> to get access of desired sheet we have to iterate from all sheet using for loop and if condition.
+		
+		Step3. Get access to all row of sheet
+		Step4. Access to specific rows from all rows
+		Step5. Get access to all cells of row
+		Step6. Access the data from Excep into Arrays
+
+==============================================================================================================================================================================
+
+video 3. Getting row and its cells from Sheet.
+
+		. Identify testcases column by scanning entire first row.
+		. scan all the column present in first row
+		
+==============================================================================================================================================================================
+		
+video 4. Retreiving data from excel bases on condition:-
+
+		. once column is identified then scan entire testcase column to identify purchase testcase row.
+==============================================================================================================================================================================
+
+video 5. Practise excercise - excel driven testing-1.
+
+		. find the purchase row from the testcase column.
+		. iterate through the purchase row.
+==============================================================================================================================================================================
+	
+video 6. Practise excercise - excel driven testing-2.
+
+		. in this we will create an arraylist to store the value of cells.
+		. put this all code inside one methhod named getData()-
+		. we create simple test class and called getData method from that class.
+		
+==============================================================================================================================================================================
+
+video 7. Practise excercise - excel driven testing-3.
+
+		. but if any cell contain numeric value than this code will not work.
+		. for solving that problem:-
+			we will use if else to check every cell value whether its string or integer.
+		. to convert form integer to string we will use this code:-
+			NumberToTextConverter.toText(c.getNumericCellValue())
+			
+==============================================================================================================================================================================
+
+video 8. Importance of dataprovider and excel integration for better data driven.
+
+		. In this video we learnt about testNG dataProvider + Excel Integration Importance.
+	
+==============================================================================================================================================================================
+
+video 9. UnderStand DataProvider and how it sends data in Multidimentional Array.
+		
+		. In this video we learnt about how dataProvider works with array.
+		. if our dataProvider has three sets of arrays than our test also runs for three times.
+
+==============================================================================================================================================================================
+
+video 10. Get Excel dependencies and connect from java code to excel.
+
+		. In this we learnt theoritiaclly.
+
+==============================================================================================================================================================================
+
+video 11. Live Demo
+
+		. In this we created class DataProviderDemo :-
+
+
+==============================================================================================================================================================================
+THE END:)
+
+==============================================================================================================================================================================
+Example code:- 
+
+
+		public class DataProviderDemo {
+		
+			DataFormatter formatter = new DataFormatter();
+		
+		//	Mutiple data sets to our tests
+		//	array
+		//	5 sets of data as 5 array from data provider to your tests.
+		//	than our test will run 5 times with 5 seperate sets of data(arrays).
+		
+			@Test(dataProvider = "drivetest")
+			public void testcaseData(String greet, String message, String id) {
+		
+				System.out.println(greet + message + id);
+			}
+		
+			@DataProvider(name="drivetest")
+			public Object[][] getData() throws IOException {
+				
+		//		Object[][] data = {{"hello","test",1},{"solo","toott",32},{"car","pack",24}};
+				
+		//		every row of excel should be sent to 1 array
+				
+				FileInputStream fis = new FileInputStream("/Users/mjangid/Documents/excelDriven.xlsx");
+				XSSFWorkbook wb = new XSSFWorkbook(fis);
+				int sheets = wb.getNumberOfSheets();
+		
+				
+				XSSFSheet sheet =  wb.getSheetAt(0);
+				int rowCount = sheet.getPhysicalNumberOfRows();
+				XSSFRow row = sheet.getRow(0);
+				int colCount = row.getLastCellNum();
+				
+				Object data[][] = new Object[rowCount-1][colCount];
+				
+				for (int i=0;i<rowCount-1;i++) {
+					
+					row = sheet.getRow(i+1);
+					
+					for (int j=0;j<colCount;j++) {
+						
+						XSSFCell cell = row.getCell(j);
+						data[i][j] = formatter.formatCellValue(cell);
+		//				System.out.println(data[i][j]);
+					}
+					
+				}	
+					
+		
+			return data;
+			}
+		
+		}
+
+
+
+==============================================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+			

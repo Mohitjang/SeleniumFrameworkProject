@@ -1,0 +1,35 @@
+==================================================================================================================
+STRUCTURE OF PROJECT:-
+==================================================================================================================
+ 
+1. In this part we converted whole selenium standalone project in the POM design.
+2. We had different pages on the website. 
+3. so, rather messing up all the code in one class, we made different class for each page.
+4. and in some classes we needed repeated methods so , those methods we defined in another class
+	and made it parent class of all the classes where parent class's methods will be needed.
+5. For testing we made an class in src/test/java folder. and called all the needed method there.
+------------------------------------------------------------------------------------------------------------------
+ Structure:-
+------------------------------------------------------------------------------------------------------------------
+->src/main/java
+	->cisco.AbstractComponents
+		->AbstractCpomponents.java	
+	->cisco.pageobjects
+		->CartPage.java
+		->CheckoutPage.java
+		->ConfirmatonPage.java
+		->LandingPage.java
+		->ProductCatalogue.java
+			
+->src/test/java
+	->cisco.tests
+		->SubmitOrder.java
+------------------------------------------------------------------------------------------------------------------
+	
+ 	
+
+
+
+
+
+ 

@@ -1,0 +1,18 @@
+Standalone Selenium Test:-
+
+
+1. Land on website "rahulshettyacademy.com/client".
+2. create an dummy account and remember the credentials.
+3. Login in website.
+4. collect products in set.
+5. add products to the cart.
+6. go to the cart page and verify that products are added.
+7. after confirmation, go to checkout page.
+8. fill the form with details we have.
+9. select country
+10. place the order.
+11. if we place one order than only one orderID will be displayed and if 2 than ID also 2.
+12. and we can comeback to orders tab and verify the OrderID's on the confirmation page and order page..
+13. click on view and make sure that every details filled is same.
+14. after that delete all the orders and verify with poping up message.
+15. go back to order page and ensure order page is empty.

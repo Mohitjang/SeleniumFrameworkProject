@@ -1,0 +1,73 @@
+==================================================================================================================
+FW2:- DESIGN PATTERN - PAGE OBJECT & FACTORY IMPLEMENTATION :-
+==================================================================================================================
+1. What is page object model. Advantages of its implement.
+------------------------------------------------------------------------------------------------------------------
+	What is page object model:-
+	in this we, create different classes for all the different pages.
+	which helps us in maintaining the code and make it more readable to us, simplified.
+------------------------------------------------------------------------------------------------------------------
+2. 	Creating page object classes for login screen and migrate the test.
+------------------------------------------------------------------------------------------------------------------
+	A - In this we learnt about how to make a class for Landing page for our app.
+	and we made a constructor to provide driver for our landing page using constructor.
+	B - We used Page Factory design pattern :-
+		That how to make variable for webelements in this style.
+		Ex :-	//	Old type:-
+				//	WebElement userEmail = driver.findElement(By.xpath("//input[@id='userEmail']"));
+					
+				//	Latest type:-
+				//	4. Page factory design pattern:-
+					@FindBy(id="userEmail") //locator
+					WebElement userEmail;   //variable
+------------------------------------------------------------------------------------------------------------------
+3. Implementing Actions methods for page factory web elements to implement logic.
+------------------------------------------------------------------------------------------------------------------
+	A - In this we made an method of Loginapp which will login in the website:-
+	B - We made new Page object class :- ProductCatalogue
+	C - In this we made AddtoCart method but halfway only:-
+------------------------------------------------------------------------------------------------------------------
+4. Creating Abstract components to reuse the common methods/codes in framework.
+------------------------------------------------------------------------------------------------------------------
+	A - we created abstract class for wait mechanism:- AbstractComponents:-
+	B - we extend the AbstractComponents class to the ProductCatalogue class. 
+	C - we used super keyword to provide driver to parent class, which is AbstractComponents.
+	D - we created getProductList method in ProductCatalogue class.
+	E - Now we got the list of webelements of products.	
+==================================================================================================================
+	
+------------------------------------------------------------------------------------------------------------------
+ overview:-
+------------------------------------------------------------------------------------------------------------------
+ 
+1. In this part we converted whole selenium standalone project in the POM design.
+2. We had different pages on the website. 
+3. so, rather messing up all the code in one class, we made different class for each page.
+4. and in some classes we needed repeated methods so , those methods we defined in another class
+	and made it parent class of all the classes where parent class's methods will be needed.
+5. For testing we made an class in src/test/java folder. and called all the needed method there.
+------------------------------------------------------------------------------------------------------------------
+ Structure:-
+------------------------------------------------------------------------------------------------------------------
+->src/main/java
+	->cisco.AbstractComponents
+		->AbstractCpomponents.java	
+	->cisco.pageobjects
+		->CartPage.java
+		->CheckoutPage.java
+		->ConfirmatonPage.java
+		->LandingPage.java
+		->ProductCatalogue.java
+			
+->src/test/java
+	->cisco.tests
+		->SubmitOrder.java
+------------------------------------------------------------------------------------------------------------------
+	
+ 	
+
+
+
+
+
+ 

@@ -1,0 +1,81 @@
+=========================================================================================================================================================
+
+Section 27:- Cross Browser Testing with Selenium Grid.
+
+=========================================================================================================================================================
+
+selenium grid link:- https://www.selenium.dev/documentation/grid/getting_started/
+
+=========================================================================================================================================================
+
+video 1. What is Selenium Grid? Its advantages on bringing down execution time.
+
+1. Selenium grid is a smart proxy server that makes it easy to run tests in parallel on multiple machines.
+
+		. in this we learnt about selenium grid archetecture.
+		
+=========================================================================================================================================================
+
+video 2. Getting started with f=grid infrastructure setup - Create components.
+
+	-> Hub and Node = Hub and Node is the most used role because it allows to:
+	
+			Combine different machines in a single Grid
+			Machines with different operating systems and/or browser versions, for example
+			Have a single entry point to run WebDriver tests in different environments
+			Scaling capacity up or down without tearing down the Grid
+		
+Steps to execute this:-
+	Step1. Download selenium jar file. (create one folder and place jar file in that folder.)
+			Download browser driver and place in the same path where Selenium server is located.
+	Step2. Start the HUB - which eventually Starts Router, Distrubuter, Session map, New Session Queue, Event Bus.
+	Step3. In_terminal# java -jar selenium-server-<version>.jar hub
+			example; -java -jar jar_file_name-version hub
+					-> it will starts the hub at the localhost 4444 given in the logs.
+	Step4. Start node in same machine:- In_terminal# java -jar selenium-server-<version>.jar node --detect-drivers true
+					-> it will starts the hub at the localhost 5555 given in the logs.
+	Step5. Start node in different physical machine:- 
+
+=========================================================================================================================================================
+
+video 3. Create node phhysical machine and register with Grid-check Grid health
+
+	Step5. Start node in different physical machine:- 
+			For doing this we have to repeat Step1. steps again in the other node machine.
+		In_terminal# java -jar selenium-server-<version>.jar node --detect-drivers true --publish-events tcp://hub'sIpaddress:4442 --subscribe-events tcp://hub'sIpaddress:4443
+	Step6. now we need to register out node machine to the hub.
+			we need to use transfer protocols so ((--publish-events))
+			we need to publish event to XPUB port 4442 ((--publish-events tcp://hub'sIpaddress:4442))
+			we need to publish event to XSUB port 4443 ((--subscribe-events tcp://hub'sIpaddress:4443))
+			Press enter :- now it will ping to 4442 and 4443 port.
+
+=========================================================================================================================================================
+
+video 4. Create Selenium TestNG tests with Desired Capabilities & remote webdriver class.
+
+Example code:- 
+
+	public class GoogleTest {
+	
+		@Test
+		public void HomePageCheck() throws MalformedURLException {
+			
+			DesiredCapabilities caps = new DesiredCapabilities();
+			caps.setBrowserName("chrome");
+			caps.setPlatform(Platform.MAC);
+	//		caps.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+			
+			WebDriver driver = new RemoteWebDriver(new URL("Actual Url of HUB"),caps);
+			driver.get("http://google.com");
+	//		Selenium code
+		}
+	}
+
+=========================================================================================================================================================
+
+video 5. Demo on executing the selenium scripts in Node machines from grid Hub.
+
+	Run the google test file.
+
+=========================================================================================================================================================
+The END:)

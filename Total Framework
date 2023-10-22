@@ -1,0 +1,43 @@
+==================================================================================================================
+POM PROJECT
+==================================================================================================================
+
+
+
+<------------ FrameworkPart 2:- Design Pattern - Page Object &factory implementation ------------>
+ 
+1. In this part we converted whole selenium standalone project in the POM design.
+2. We had different pages on the website. 
+3. so, rather messing up all the code in one class, we made different class for each page.
+4. and in some classes we needed repeated methods so , those methods we defined in another class
+	and made it parent class of all the classes where parent class's methods will be needed.
+5. For testing we made an class in src/test/java folder. and called all the needed method there.
+
+==================================================================================================================
+
+
+
+<------------ FrameworkPart 3:- Test Configuration Methods & Global Propertiesv& Parallel runs ------------>
+
+1. Create base class->
+	created initialized driver method.
+	
+2. Global Properties:- we created properties file which holds c=browser name.
+3. we created order page and created errorvalidations test and orderdisplayhistory test.
+4. we did group testing using xml file.
+5. we did dependsonmethods testing.
+6. we did parallel testing on class and method level using xml file.
+
+==================================================================================================================
+
+
+
+<------------ FrameworkPart 4:- Test Strategy - Control Test Execution - Run parallel Tests ------------>
+
+
+1. How to parameterized testcases using dataproviders.
+2. learnt about extention that how to drive the data from JSON.
+3. In data privider we will do the JSON concepts.
+4. 
+
+ 

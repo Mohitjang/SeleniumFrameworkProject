@@ -1,0 +1,147 @@
+=========================================================================================================================================================
+
+Section 30:- File Uploading (AUTO IT) & Downloading with Selenium..
+
+=========================================================================================================================================================
+
+video 1. Handling Window Authentication pop ups with Selenium.
+
+	. Handling Window Authentication pop up:-
+		http://Username:Password@SiteURL
+	. Handling File Upload from windows using AutoIT.
+		- What is AutoIT.
+		- Install AutoIT
+		- AutoIT Scripting 
+		- Integrating AutoIT with Selenium.
+	
+
+=========================================================================================================================================================
+
+video 2. Examples on Handling pop ups with Modified webdriver URL.
+
+	public class WindowPopUps {
+	
+		@Test
+		public void popUp() {
+			
+			WebDriver driver = new FirefoxDriver();
+	//		driver.get("https://the-internet.herokuapp.com/");
+			driver.get("https://admin:admin@the-internet.herokuapp.com/");
+			driver.findElement(By.linkText("Basic Auth")).click();
+		}
+	}
+
+=========================================================================================================================================================
+
+video 3. What is AutoIT. Installation Details.
+
+	 A. Download AutoIT exe file from their website.
+	 B. Build Script :- Open scite.exe editor.(AutoIT)
+	 C. Save it :- .au3 extention.
+	 D. Convert file into .exe by compiling .au3 file.
+	 E. Call .exe file with Runtime class in java into your selenium tests.
+	 	=> Runtime.getRuntime().exec("path/of/autoit/exe/file");
+	 
+Workflow:-
+	 1. First we need to tell to AutoIT to shift their focus to file upload window.
+	 2. Set text/path into file name edit box.
+	 3. click open to upload the file.
+	
+	
+=========================================================================================================================================================
+
+video 4. Inspecting the window objects and converting into AutoIT code.
+
+Practical:-
+	Step1. Open Au3info_x64 named app (this is called spy tool).
+	Step2. Open editer tool.
+	Step3. Now we have to shift the focus. for that we have command '''ControlFocus("title","text","controID")'''
+	Step4. To set the path of file in the name edit box. '''ControlSetText("title","text","controID","path/of/file")'''
+	Step5. now we need to click on open button. '''ControlClick("title","text","controID")'''
+	Step6. Save this AutoIT script file.
+	Step7. now we need to compile this file as well and .exe file will be created and we will invoke this file from our selenium script.
+	Step8. Call .exe file with Runtime class in java into your selenium tests.
+	 		=> Runtime.getRuntime().exec("path/of/autoit/exe/file");
+	
+=========================================================================================================================================================
+	
+video 5. End to end example on uploading file with AutoIT selenium.
+
+			public class FileUploadDemo {
+		
+			
+			@Test
+			public void fileUpload() throws InterruptedException, IOException {
+				
+				WebDriver driver = new FirefoxDriver();
+		//		driver.get("https://the-internet.herokuapp.com/");
+				driver.get("https://www.pdf2go.com/pdf-to-jpg");
+				driver.findElement(By.cssSelector("button[class*='uploadbox']")).click();
+				Thread.sleep(3000);
+				
+				Runtime.getRuntime().exec("path/of/autoit/exe/file");	
+			}
+		}
+	
+=========================================================================================================================================================
+
+video 6. Steps to complete the flow to download file from application with selenium.
+
+	A. verify if the file is succesfully downlaoded.
+	B. java file package.
+	C. Delete the file from your system.
+
+	Step1. After Uploading the file.
+	Step2. Explicitely wait for upload time of file till the convert button is visible.
+	Step3. Explicitely wait for conveting time of file till the downlaod button is visible.
+	Step4. click on download.
+==> verifing file is download or not ?
+	Step5. Create File class object. using the downlaoded file path.
+	Step6. if f.exists("file found");
+	
+
+
+=========================================================================================================================================================
+
+video 7. Chrome driver options to configure download path of the browser.
+
+==> In this lecture we will get the path of file dynamically by downloading the file in the project path.
+
+	Step1. We will use ChromeOptions class's object to download file in our project :-
+			=> ChromeOptions options = new ChromeOptions();
+		
+	Step2. Now we will create hashmap object chromePref :-
+			=> HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
+			
+	Step3. Now we will put the properties in this hashmap to change the directory of downlaoading files :-
+			=> chromePrefs.put("profile.default_content_settings.popups", 0);
+			=> chromePrefs.put("download.default_directory", downloadPath);
+		
+	Step4. Now we will set_experimental_option in object options in the form of key:value pairs :-
+			=> options.setExperimentalOption("prefs", chromePrefs);
+		
+
+=========================================================================================================================================================
+The END:)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

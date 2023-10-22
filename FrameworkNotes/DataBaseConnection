@@ -1,0 +1,145 @@
+=========================================================================================================================================================
+
+Section 29:- DataBase connection to Selenium Testcases.
+
+=========================================================================================================================================================
+
+video 1. Steps to connect database to selenium testcases.
+
+	. Problem explaination :-
+		-> Why we need to integrate our testcases to SQL databases while we know Excel and json data driven.
+
+=========================================================================================================================================================
+
+video 2. MySQL download instructions.
+
+Step1. Downloading MySQL.
+		
+	Link:- https://dev.mysql.com/downloads/windows/installer
+
+=========================================================================================================================================================
+
+video 3-6. Database , table, row setup.
+	
+	Queries:-
+	
+		#creating database:
+		create database Qadbt;
+		
+		#using specific database:
+		use Qadbt;
+		
+		#creating tables:
+		create table Employeeinfo(name varchar(20),id int,location varchar(20),age int);
+		
+		#to see the table schema:
+		describe Employeeinfo;
+		
+		#insert data into tables:
+		insert into Employeeinfo values('dheeraj',2353,'Delhi',26);
+		insert into Employeeinfo values('mohit',2332,'Haryna',27);
+		insert into Employeeinfo values('chandu',2123,'Bnagalore',23);
+		insert into Employeeinfo values('harish',6453,'Pune',30);
+		insert into Employeeinfo values('lalu',5327,'Mumbai',35);
+		
+		#seeing table:
+		select * from Employeeinfo;
+
+=========================================================================================================================================================
+
+video 7. Integration of database with JDBC Api.
+
+created new database and table:-
+
+			#creating database:
+			create database demo;
+			
+			#using specific database:
+			use demo;
+			
+			#creating tables:
+			create table credentials(scenario varchar(20),username varchar(20),password varchar(20));
+			
+			#to see the table schema:
+			describe credentials;
+			
+			#insert data into tables:
+			insert into credentials values('zerobalancecard','zerobcc','1234ees');
+			insert into credentials values('outstbalancecard','osbcc','asfc33');
+			insert into credentials values('rewardscard','rcbcc','123wefs');
+			insert into credentials values('shoppingcard','scbcc','1234qfe');
+			insert into credentials values('basiccard','bsbcc','1234ewd');
+			
+			#seeing table:
+			select * from credentials;
+
+=========================================================================================================================================================
+
+video 8-9. Steps to connect Database info to Selenium.
+
+example code:-
+
+			public class JdbcConnection {
+			
+				@Test
+				public void dataBaseDemo() throws SQLException {
+					// TODO Auto-generated method stub
+			
+			//		Conection URL = "jdbc:mysql://" + host + ":" + port + "/databasename"
+			//									    localhost	   3306     demo(given by client)
+					String hostname = "localhost";
+					String portno = "3306";
+					String URL = "jdbc:mysql://" + hostname + ":" + portno + "/demo";
+					
+			//		connect to mysql database:-
+					Connection conn = DriverManager.getConnection(URL,"root","User@root");
+					
+			//		build a road to execute queries:-
+					Statement s = conn.createStatement();
+					
+			//		Executing querie and string results in result set :-
+					ResultSet rs =  s.executeQuery("select * from credentials where scenario='shoppingcard';");
+					
+			//		re is an array places at 1st index:-
+			//		but to move pointer from base index to 1st index:
+			//		so we will use while loop for this:-
+						while(rs.next()){
+					
+					String username = rs.getString("username");
+					String pass = rs.getString("password");
+					System.out.println(username+" "+pass);
+			
+					WebDriver driver = new FirefoxDriver();
+					driver.get("https://login.salesforce.com/?locale=in");
+					driver.findElement(By.cssSelector("#username")).sendKeys(username);
+					driver.findElement(By.cssSelector("#password")).sendKeys(pass);
+					driver.findElement(By.cssSelector("#Login")).click();
+					
+			
+			//		now send the data to real website using normal Selenium code:-
+					
+					
+					}
+					
+				}
+			
+			}
+
+=========================================================================================================================================================
+The END:)
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		
+		

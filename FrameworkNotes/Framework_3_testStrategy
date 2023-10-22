@@ -1,0 +1,106 @@
+==================================================================================================================
+FW3:- TEST CONFIGURATION METHODS AND GLOBAL PROPERTOES & PARALLEL RUN :-
+==================================================================================================================
+1. Creating BaseTest class which holds common test configuration method.
+------------------------------------------------------------------------------------------------------------------
+	1. we created a BaseTest class in the test folder.
+	2. in baseTest class we define those testcases which we want to inherit from all the other test classes.
+	3. like @BeforeMethod and @AfterMethod :-
+	4. in every testcases we need to launch the aaplication on which we will perform tests.
+	5. and after every test execution we need to close the browser.
+	6. that's why we use BaseTest class.
+------------------------------------------------------------------------------------------------------------------
+2. 	Initialize driver and create utility to launch app with beforemethod annotation.
+------------------------------------------------------------------------------------------------------------------
+	1. in this part we initialize the driver using global properties file.
+		i.e. chrome,firefox etc.
+	2. In this we put all the boiler code which we need to initialize driver.
+	3. and using this Initialized driver we will create launchapplication method.
+	4. launchapplication method will be called before every test case.
+------------------------------------------------------------------------------------------------------------------
+3. Create new Error valodation test as per framework standards eveloped until now.
+------------------------------------------------------------------------------------------------------------------
+	1. in this we created another test class for error validations. 
+	2. loginErrorValidation()
+	3. productErrorValidation()
+	4. above two methods we created in this testclass.
+	5. loginErrorValidation() :- if username or password is not right, than it will assert the loginfail message 
+		shown on the page.
+	6. productErrorValidation() :- if product name given for test is not right, than it will check the product is 
+		present in cart page or not. 
+	
+------------------------------------------------------------------------------------------------------------------
+4. Implement test strategy for framework on how tests are divided based on modules.
+------------------------------------------------------------------------------------------------------------------
+	1. in this we learnt about the test cases strategy:-
+	2. like if we have 100 test cases, so for 100 testcases we don't have to create 100 testclass.
+		it's not a good practice.
+	3. like we can classified those 100 testcases in some way that each class must contains more than one test cases.
+	4. for example :- Loginpagetest contains  5 testcases.
+						submit order, order checK.
+						login error validation, producterrorvalidation. 
+		in this way we can make our testcases more readable and it's a good practice.
+	5. like one class contains positive scenarios and the other contains negative scenarios.
+	6. in testNG we can run our all 100 testcases with just one click using testng.xml file.
+	7. not only this feature, using xml file we can do many more things easily with our testcses.
+		for ex. we can run desired testcases,different groups, some testcases , all ,dependable testcases using 
+		xml file.
+	8. while using xml file we have more control on test executions than without xml file. 
+==================================================================================================================
+	
+------------------------------------------------------------------------------------------------------------------
+ 5. Create new test methods with dependency attribute based on test strategy design.
+------------------------------------------------------------------------------------------------------------------
+ 	1. In this we created orderHistoryTest() which depends on method submitOrder():-
+ 	2. like first we have to submit the order and then only we can validate the product is displaying or not 
+ 		on orderpage.
+ 	3. beacause we know order page is a different page so, we have to make a pageobject of orderpage in
+ 		AbstractComponents class.  	
+ 	4. after craeting Orderpage we have to goto order page using product catalogue object.
+ 	5. in orderpage class we made a method verifyOrderDisplay():-
+ 		which returns boolean value depends on product is present or not in the orderpage.
+ 	6. and we Assert the boolean value and validate.
+ 	
+------------------------------------------------------------------------------------------------------------------
+ 6. How to run tests/classes in parallel and apply groups using testng.xml file.
+------------------------------------------------------------------------------------------------------------------
+	1. usinf xml file :-
+	2. we can run test cases accroding to groups we assigned:-
+		example:--<groups>
+						<run>
+							<include name="Error Handling"></include>
+						</run>
+					</groups>
+	3. we can run multiple testclasses at the same time using :-
+		example;- <suite  parallel = "tests" name="Suite">
+	4. we can run multiple methods of the same class at the same time:-
+		example:- <suite  parallel = "methods" name="Suite">
+------------------------------------------------------------------------------------------------------------------
+PROJECT:-
+------------------------------------------------------------------------------------------------------------------
+->src/main/java
+	->cisco.AbstractComponents
+		->AbstractCpomponents.java	
+	->cisco.pageobjects
+		->CartPage.java
+		->CheckoutPage.java
+		->ConfirmatonPage.java
+		->LandingPage.java
+		->ProductCatalogue.java
+		->OrderPage.java
+			
+->src/test/java
+	->cisco.TestComponents
+		->BaseTest.java
+	->cisco.tests
+		->SubmitOrder.java
+		->ErrorValidations.java
+------------------------------------------------------------------------------------------------------------------
+	
+ 	
+
+
+
+
+
+ 

@@ -1,0 +1,234 @@
+=============================================================================================================================================================================
+
+		Framework Part 5:- Extent HTML Reports & TestNG Listeners & thread safety.
+
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video1.:- Phase 1- What are Extent Reports? Quick 30 minutes Tutorial.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Q1. What are Extent Reports?
+Q2. Understand basic Configuration of extent reports with Standalone test.
+Q3. Generating Extent Reports for parallel test execution.
+Q4. Attaching Screenshots to reports for Failed Tests using Testing Listeners.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+public class ExtentReportsDemo {
+	
+//	Globally defined:-
+	ExtentReports extent;
+
+	@BeforeTest
+	public void config() {
+
+//		ExtentReports , ExtentSparkReporter
+		
+//		Creating object of class "ExtentSparkReporter"-
+//		path = where html file will be created:-
+		String path = System.getProperty("user.dir")+"//Reports//index.html";
+		ExtentSparkReporter reporter = new ExtentSparkReporter(path);
+		
+//		Set report name:-
+		reporter.config().setReportName("Web Automation Results Mohit");
+		reporter.config().setDocumentTitle("Test Results");
+		
+//		Creating object of class "ExtentReports"-
+		
+		extent = new ExtentReports();
+		extent.attachReporter(reporter);
+		
+//		set tester name:-
+		extent.setSystemInfo("Tester", "Mohit Jangid");
+		
+		
+	}
+
+	@Test
+	public void initialDemo() {
+		
+		ExtentTest test = extent.createTest("Initial Demo");
+		
+		WebDriver driver = new FirefoxDriver();
+		driver.get("https://rahulshettyacademy.com");
+		System.out.println(driver.getTitle());
+//		assertTrue(false);
+//		test.addScreenCaptureFromBase64String(s);
+		test.fail("result do nnot match");
+		
+		
+//		after flush extent will update the report.
+		extent.flush();
+	}
+
+}
+
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+video2:- Phase 2- Integrating Extent Reports to existing framework with help of TestNG Listeners.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Q1. Generate Reports?
+Q2. Extent Reports + TestNG Listeners?
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public class Listeners extends BaseTest implements ITestListener{
+
+	ExtentReports extent = ExtentReporterNG.getReportObject();
+	ExtentTest test;
+	ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>(); //Thread safe
+		
+	@Override
+	public void onTestStart(ITestResult result) {
+		
+		// we will create extent report object here
+		
+		test = extent.createTest(result.getMethod().getMethodName());
+		
+//		now we store our test object inside "extentTest.set(test)" for unique thread id using set() method:-
+		extentTest.set(test); //unique thread id(test method)->test
+	}
+	
+	@Override
+	public void onTestSuccess(ITestResult result) {
+		
+		extentTest.get().log(Status.PASS, "Test passed");
+	}
+	
+	@Override
+	public void onTestFailure(ITestResult result) {
+		
+//		showing error messages
+		extentTest.get().fail(result.getThrowable());
+		
+//		getting the driver life:-
+		try {
+			driver= (WebDriver)result.getTestClass().getRealClass().getField("driver").get(result.getInstance());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+//		In this we will take Screenshots & save to the path:-
+		String filePath = null;
+		try {
+			filePath = getScreenshot(result.getMethod().getMethodName(),driver);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		adding screenshot to the extent report:-
+		extentTest.get().addScreenCaptureFromPath(filePath, result.getMethod().getMethodName());
+	}
+	
+	@Override
+	public void onFinish(ITestContext context) {
+
+		extent.flush();	
+	}
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+video3:- Phase 3- Attaching Screenshots to reports from Liteners on automatic test failure.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+//		adding screenshot to the extent report:-
+		extentTest.get().addScreenCaptureFromPath(filePath, result.getMethod().getMethodName());
+	}
+	
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+video4:- Conncurrency problem- Implement ThreadLocal class to avoid sync issues in test:-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	1. as we completed Extent reports section now we know to implement Extent reports in Selenium.
+	2. But we have one issue with that:- 
+		like :- when we run our test in series it works totally fine.
+				But when we want to execute our test Parallely than we got sync issue.
+		for example:-
+			on start we create ExtentReport test object for one object but at the same time in parallel test same ExtentReport test will create ,
+			and it will create issue because more that one tests reporting to same test.
+		for solvong this:-
+			 we will use ThreadLocal class. which will help us to create unique testid for all extent report test instances.
+			 
+			 
+			 
+example code:- 
+
+	ExtentTest test;
+	ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>(); //Thread safe
+	
+//      now we store our test object inside "extentTest.set(test)" for unique thread id using set() method:-
+
+onstart:-
+		extentTest.set(test); //unique thread id(test method)->test
+		
+onfail:-
+		public void onTestFailure(ITestResult result) {
+		
+//		showing error messages
+		extentTest.get().fail(result.getThrowable());
+		}
+		
+	
+=============================================================================================================================================================================
+		
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+video5:- IRetry Annalizer to rerun the flaky failed selenium tests in the frameworks:-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	1. In this lecture we will learn about how to rerun the paricular test if we want to run that test if test Fails.
+	2. for this to happened we have make a class Retry
+	3. which implements IRetryAnalyzer interface.
+	4. after the testcase fails focus will automatically come to this code and it will rerun the test if ,if condition is true. Until it becomes false.
+	5. In Attribute line we will tell the test to rerun after failing.
+		i.e. @Test(retryAnalyzer= Retry.class)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+example:- TestCase-
+															
+	In this line we will tell the test to rerun after failing.
+	@Test(groups = {"Error Handling"},retryAnalyzer= Retry.class)
+	
+	public void loginErrorValidation() throws IOException, InterruptedException{
+		// TODO Auto-generated method stub
+
+		landingPage.loginApplication("mjangid@gmail.com", "Mj.125678");
+		Assert.assertEquals("Incorrect email r password.",landingPage.getErrorMessage());
+	} 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+example:- Retry Class- package (cisco.TestComponents)
+
+
+public class Retry implements IRetryAnalyzer{
+
+	
+	//	After failing test Listener failed test will to this code and asks do i need to run again
+	//	maybe because it's a flaky test:- 
+		
+		int count = 0;
+		int maxTry = 1;
+		
+		
+		@Override
+		public boolean retry(ITestResult result) {
+			
+			if (count<maxTry) {
+	//			to tell the rerun the code:-
+				count++;
+				return true;
+				
+				
+			}
+	//		if condition is not true then it will nnot rerun the code:-
+			return false;
+		}
+	
+	//	To activate rerun test we have to give attributr to the testmethod:-
+		
+	}
+
+=============================================================================================================================================================================
+	
+		

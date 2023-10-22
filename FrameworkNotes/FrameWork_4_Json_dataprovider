@@ -1,0 +1,175 @@
+Frame Work 4 :-
+============================================================================================================================================================================
+1. In this lecture we will learn about how fetch data for our testcases using json file.
+============================================================================================================================================================================
+
+video1:- AGENDA OF IMPLEMENTING PARAMETERIZATION INTO TESTS WITH TESTNG DATA POVIDERS:-
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Step 1. we will create getData() method in our test file where we need data from internal sources.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+example:-  
+
+			@DataProvider
+			public Object[][] getData() {		
+		//		two data sets of {username,password}
+		
+				return new Object[][] {{"mjangid@gmail.com","Mj.12345678","iphone 13 pro","India"},{"mohit2406@gmail.com","Mj.12345678","ZARA COAT 3","India"}};
+			}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
+STEP 2. Now we have to attach this dataProvider to our testcase.		
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+example:-
+		
+		@Test(dataProvider = "getData",groups = "Purchase")
+			public void submitOrder(String email, String password, String productName, String countryName) throws IOException {
+				//code
+		}
+		
+// in this type we have to catch all the parameter as argument whether we have 3 parameters or 15 parameters, and it's not good practice and looks more messy. 
+// BUT IN THIS TYPE WE HAVE TO PASS DATA AS ARGUMENT TO OUR TESTCASES WHICH IS NOT IDEAL.
+
+============================================================================================================================================================================
+
+video2:- INTEGRATION OF HASHMAPS TO DATAPROVIDER TO SEND THE AS ONE HASH OBJECT:-
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+STEP 3. In Step1. type we have to catch all the parameter as argument whether we have 3 parameters or 15 parameters, and it's not good practice and looks more messy.
+		in this step we will find better way to handle data.
+		SO, now we will fetch data form external sources:-
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+example:-		
+
+		data provider also allowed to return hashmap(dictionary):-
+		Now we will modify the getData() method:-
+		
+			@DataProvider
+			public Object[][] getData() {
+			
+		//		dataset 1 {dictionary}
+				HashMap<String, String> map = new HashMap<String,String>();
+				map.put("email", "mjangid@gmail.com");
+				map.put("password", "Mj.12345678");
+				map.put("productName", "iphone 13 pro");
+				map.put("countryName", "India");
+				
+		//		dataset 2 {dictionary}		
+				HashMap<String, String> map1 = new HashMap<String,String>();
+				map1.put("email", "mohit2406@gmail.com");
+				map1.put("password", "Mj.12345678");
+				map1.put("productName", "ZARA COAT 3");
+				map1.put("countryName", "India");
+		
+				return new Object[][] {{map},{map1}};
+			}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+STEP 4. Now we have to attach this dataProvider to our testcase.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+example:- 
+
+			public void submitOrder(HashMap <String,String> input) throws IOException ,InterruptedException{
+		// code here
+		 // in this code we will fetch data as our need from HashMap object input:- 
+		 	like:- input.get("email")
+		
+		}
+============================================================================================================================================================================
+
+video3:- HOW TO READ THE DATA FROM JSON FILES AND CREATE THE LIST OF HASGMAPS FOR TESTING:-
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+STEP 5. now we will use json file as data file and will learn about how to fetch data with json file using dataProvider.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+in this step :-
+	1. first we will create a json file which holds our data.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+example:-
+ 
+perchaseOrder.json :-filename
+
+			[
+				{
+					"email": "mohit2406@gmail.com",
+					"password":"Mj.12345678",
+					"productName":"iphone 13 pro",
+					"countryName":"India"
+				},
+				{
+					"email": "mjangid@gmail.com",
+					"password":"Mj.12345678",
+					"productName":"ZARA COAT 3",
+					"countryName":"India"
+				}
+			]
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	2. Then we will create a class Datareader{} to read data from json file.
+	3. and we will write a method getJsonDataToMap() which will below things:-
+		a. it will read data from json and convert it into String.
+		b. and then convert those strings into Hashmaps.
+		c. and then return the data in the form of Hashmaps.
+		d. and we will call this method inside our testcase's getData() method.
+		e which will send the data to the testMethod in the form of Hashmaps.
+		f. to access this method form testfile we will copy paste this method in our BaseTest class(Parent class).
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+example of getJsonDataToMap method:-
+
+			public class DataReader {
+			
+				public List<HashMap<String, String>> getJsonDataToMap(String filePath) throws IOException {
+			//		read json to string:-
+					String jsonContent = FileUtils.readFileToString(
+							new File(filePath),
+							StandardCharsets.UTF_8);
+			//		convert json string to HashMaps:-
+			//		(jackson databind) dependency we need for this conversion-
+					ObjectMapper mapper = new ObjectMapper();
+			
+					List<HashMap<String, String>> data = mapper.readValue(jsonContent,
+							new TypeReference<List<HashMap<String, String>>>() {
+							});
+			
+					return data;
+				}
+			
+			}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+example of getData method:-
+		
+		public Object [][] getdata(){
+		
+		HashMap<String,String> data = getJsonDataToMap(Filepath);
+		
+		return new Object[][] {{data.get(0)},{data.get(1)}};
+	}
+============================================================================================================================================================================
+
+video4:- HOW TO CREATE SCREENSHOT UTILITY IN BASETEST CLASS FOR CATCHING FAILED TESTS:-
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	1. In this part we learnt about how to take screenshot and save as a file in folder.
+	
+example:-
+
+		//	TAKE SCREENSHOT:-
+		 public String getScreenshot(String testCaseName) throws IOException {
+			 
+			 TakesScreenshot ts = (TakesScreenshot)driver;
+			 File source =  ts.getScreenshotAs(OutputType.FILE);
+			 File file = new File(System.getProperty("user.dir")+"//reports//"+testCaseName+".png");
+			 FileUtils.copyFile(source, file);
+			 return System.getProperty("user.dir")+"//reports//"+testCaseName+".png";
+		 }
+	
+============================================================================================================================================================================
+
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+

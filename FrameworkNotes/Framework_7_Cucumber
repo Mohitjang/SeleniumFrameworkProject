@@ -1,0 +1,232 @@
+=============================================================================================================================================================================
+
+		Framework Part 7:- Integrating Cucumber Wrapper into Selenium Framework.
+
+=============================================================================================================================================================================
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video1.:- imp. note :-  How much course this Cucumber course cover?
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+A. Java-TestNG id Test Driven Development Frameowrk. (TDD)
+	Cucumber is Behaviour Driven Development. (BDD)
+
+B.	This course cover only high level concept of Cucumber :
+	Hence this course is divided in two parts:-
+		
+		Part1. video2. Introduction to Cucumber.
+		Part2. video3-video7. integration with TestNG.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video2.:- Introduction to Cucumber and its terminologies with examples.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+A. What is Gherkins ?
+	- It is a language to describe software behaviour.
+	- In testing terms it's a language to define the testcase.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video3.:- Setting up Cucumber dependencies into framework and create feature files ?
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+A. Add cucumber-java and cucumber-testng dependencies into pon.xml file.
+B. create one feature file.
+C. Before writing feature files we need to add cucumber plugin from Ecllipse marketplace to support feature files.
+D. Create SubmitOrder.feature file.
+
+feature file:- 
+	. One feature file can have multiple scenarios in cucumber is same as one test class can have multiple test cases/methods.
+	. like one method in testng is same as one scenario in cucumber.
+	. feature file in cucumber is same as testclass in testng.
+	. in testng we take data from dataproviders but in cucumber we take data from Example section.
+	. if Scenario is taking data than we have to mark it as scenario Outline.
+	. WE USE BACKGROUND as a prerequisite for scenarios.
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video4.:- Implement step definitions for features and understand regular expressions.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			
+A. Create stepDefinition java class.
+	and start writing java code as per feature file.
+	
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	public class StepDefinitionImpl extends BaseTest{
+	
+	public LandingPage landingPage;
+	public ProductCatalogue productCatalogue;
+	public CartPage cartPage;
+	
+	
+//  1.
+	@Given("I landed on Ecommerse Page")
+	public void I_landed_on_Ecommerse_Page() throws IOException {
+		
+		//code
+		landingPage = launchApplication();
+		
+	}
+	
+//	2.
+	@Given("^Logged in with username (.+) and password (.+)$")
+	public void Logged_in_with_username_and_password(String username ,String password){
+		
+		//code
+		productCatalogue = landingPage.loginApplication(username, password);
+	}
+	
+//	3. 
+	@When("^I add product (.+) from cart$")
+	public void I_add_product_from_cart(String productName) {
+		
+		//code
+		productCatalogue.addProductToCart(productName);
+		
+	}
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video5.:- Inject selenium code in step definition and introduction to Tidy gherkin plugin.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+B. completing the left code above.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//	4. 
+	@And ("^Checkout (.+) and submit the order$")
+	public void Checkout_and_submit_the_order(String productName,String countryName) {
+		
+		cartPage = productCatalogue.goToCartPage();
+		boolean match = cartPage.verifyProductDisplay(productName); 
+		Assert.assertTrue(match);
+		checkoutPage = cartPage.goToCheckOut();
+		checkoutPage.selectCountry(countryName);
+		confirmationPage = checkoutPage.submitOrder();
+	}
+	
+//	5. Then "THANKYOU FOR THE ORDER." is displayed on confirmation page
+	@Then ("{string} is displayed on confirmation page")
+	public void message_is_displayed_on_confirmation_page(String string) {
+		
+		String confirmMsg = confirmationPage.getConfirmationMsg();
+		Assert.assertTrue(confirmMsg.equalsIgnoreCase(string));
+	}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video6.:- Introduction to testNG runner to run Cucumber feature files.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+A. we can use TestNG runner or Junit runner.
+	But it depends on that our code driven by TestNG or Junit.
+	In our case our code is driven by TestNG, So we will use TestNG runner.
+	
+B. In cucumber package create one class (TestNGTestRunner):-
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Example:- 
+
+
+package cucumber;
+
+import io.cucumber.testng.AbstractTestNGCucumberTests;
+import io.cucumber.testng.CucumberOptions;
+
+@CucumberOptions(features="src/test/java/cucumber",glue = "cisco.stepDefinitions",monochrome = true,plugin = {"html:target/cucumber.html"})
+public class TestNGTestRunner extends AbstractTestNGCucumberTests{
+
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Video7.:- Control the cucumber feature files execution with Tags and Background Keywords.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+A. In this lecture we are creating another feature file for practice purpose.
+	In this lecture we completed cucumber.
+
+B. To run cucumber test we have to run the java file.
+
+C. But if we want to run this file using jenkins then we have to write one more profile like we did for testng test files.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+example:- 
+
+
+		<profile>
+			<id>CucumberTest</id>
+			<build>
+				<pluginManagement>
+					<!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<version>3.1.2</version>
+							<configuration>
+								<includes>
+									<include>
+										**/TestNGTestRunner.java
+									</include>
+								</includes>
+								
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+		
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

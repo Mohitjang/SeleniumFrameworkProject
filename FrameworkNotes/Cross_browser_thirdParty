@@ -1,0 +1,102 @@
+=========================================================================================================================================================
+
+Section 30:- Cross Browser Testing on cloud using third party vendors.
+
+=========================================================================================================================================================
+
+video 1. What is cross browser testing on Cloud/ BrowserStack support to run tests.
+
+Steps To Execute:- 
+
+Step1. Create Browser Stack profile.
+Step2. Create Maven TestNG project with Sample test.
+Step3. Define .yml file which has browser/OS details to run.
+Step4. Add SDK dependency.
+Step5. Set Capabilities.
+Step6. Run test with SDK jar argument.
+
+
+
+
+How to read the docuentation:-
+
+1. goTo browserStack site.
+	developer >> documentation >> Selenium >> testng.click;
+3. goTo github :- 
+	https://github.com/browserstack/testng-browserstack/tree/master
+
+
+
+Practical:-
+ 	1. create broserstack.yml file in your project.
+ 	2. make changes in the yml file on browserstack site and copy paste that code in this folder's .yml file.
+ 	....to be continued
+ 	
+ 	
+ 	
+=========================================================================================================================================================
+ 	
+video 2. End to End test execution on cloud with BrowserStack (Browser/OS combinations).
+
+Practical:-
+ 	1. create broserstack.yml file in your project.
+ 	2. make changes in the yml file on browserstack site and copy paste that code in this folder's .yml file.
+ 	3. create empty capabilities object to give in remote argument section.
+ 	4. add jar_file/dependency which will read the desired capabilities from .yml file.
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ 	dependency:-
+		 		 <dependency>
+		            <groupId>com.browserstack</groupId>
+		            <artifactId>browserstack-java-sdk</artifactId>
+		            <version>LATEST</version>
+		            <scope>compile</scope>
+		        </dependency>
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ 	 5. But we need to invoke this jar file at run time while running using maven command:-
+ 	 	so, we need to add below code in plugins tag in pom.xml file to invoke testng.xml file.
+ 	 	
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ 	 plugin code:- 
+ 	 
+			 	 <plugin>
+								<artifactId>maven-project-info-reports-plugin</artifactId>
+								<version>3.0.0</version>
+							</plugin>
+							
+							<plugin>
+			               <artifactId>maven-dependency-plugin</artifactId>
+			                 <executions>
+			                   <execution>
+			                     <id>getClasspathFilenames</id>
+			                       <goals>
+			                         <goal>properties</goal>
+			                       </goals>
+			                   </execution>
+			                 </executions>
+			            </plugin>
+			            <plugin>
+			                <groupId>org.apache.maven.plugins</groupId>
+			                <artifactId>maven-surefire-plugin</artifactId>
+			                <version>3.0.0-M5</version>
+			                <configuration>
+			                    <suiteXmlFiles>
+			                        <suiteXmlFile>testng1.xml</suiteXmlFile>
+			                    </suiteXmlFiles>
+			                    <argLine>
+			                        -javaagent:${com.browserstack:browserstack-java-sdk:jar}
+			                    </argLine>
+			                </configuration>
+			            </plugin>
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+	6. Workflow-> 
+				>>run the test as maven test 
+				>> runs pom.xml file 
+				>> it invoke the testng.xml file as well as invoke the jar file of browserStack 
+				>> runs testng.xml 
+				>> runs testcases>
+
+=========================================================================================================================================================
+The END:)
+
